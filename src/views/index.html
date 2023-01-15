@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>WebSocket Client</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+        <style>
+            aside {
+                position: fixed;
+                background: #eeeeee;
+                right: 0;
+                top: 0;
+                height: 100%;
+                width: 300px;
+                z-index: 9;
+            }
+            .wrapper {
+                padding-right: 300px;
+            }
+            .event-box {
+                background: #f6f6f6;
+                margin-bottom: 15px;
+                padding: 14px 10px;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <div class="wrapper">
+
+            <main class="container py-4">
+            </main>
+            <aside>
+                <div class="p-5">
+                    <div class="text-emphasis mb-3">Send Socket Event: </div>
+                    <div class="d-grid gap-4">
+                        <button class="btn btn-primary" type="button" onclick="sendEvent('Subscribe')">Subscribe</button>
+                        <button class="btn btn-secondary" type="button" onclick="sendEvent('Unsubscribe')">Unsubsribe</button>
+                        <button class="btn btn-info" type="button" onclick="sendEvent('CountSubscribers')">CountSubscribers</button>
+                        <button class="btn btn-warning" type="button" onclick="sendEvent('CountSubscribe')">Method not implemented</button>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        
+
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+
+        <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+        <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+        <script>
+            const socket = io('localhost:8080');
+
+            socket.on('connect', () => {
+                console.log('connected')
+            })
+
+            socket.on('message', (payload) => {
+                
+                var htm = '<div class="event-box">';
+                htm += '<div class="event-name">Event received: <span class="badge bg-success">message</span></div>';
+                htm += '<div class="event-data">Payload: <code>"'+JSON.stringify(payload)+'"</code></div>';
+                htm += '</div>';
+
+                $('main.container').append(htm);
+            })
+
+            socket.on('error', (payload) => {
+                
+                var htm = '<div class="event-box">';
+                htm += '<div class="event-name">Event received: <span class="badge bg-danger">error</span></div>';
+                htm += '<div class="event-data">Payload: <code>"'+JSON.stringify(payload)+'"</code></div>';
+                htm += '</div>';
+
+                $('main.container').append(htm);
+            })
+
+            function sendEvent(event) {
+                socket.emit('message', JSON.stringify({ type: event }));
+
+                var htm = '<div class="event-box">';
+                htm += '<div class="event-name">Event sent: <span class="badge bg-success">message</span></div>';
+                htm += '<div class="event-data">Payload: <code>{type: "'+event+'"}</code></div>';
+                htm += '</div>';
+
+                $('main.container').append(htm);
+            }
+        </script>
+    </body>
+</html>
