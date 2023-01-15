@@ -13,13 +13,14 @@ Must have Node.js v16 or above, the app is built on Node v16.16.0
 Please follow the steps below to run the app:
 
 1.  Clone the repo
-    ```sh
-   git clone https://github.com/muzammilversiani/b2broker-test.git
-   ```
+```sh
+git clone https://github.com/muzammilversiani/b2broker-test.git
+```
+
 2.  Install NPM packages
-   ```sh
-   npm install
-   ```
+```sh
+npm install
+```
 
 ### Run
 
